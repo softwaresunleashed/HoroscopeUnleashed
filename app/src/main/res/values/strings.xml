@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Horoscope Unleashed</string>
+
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="title_activity_integrated_web_browser">IntegratedWebBrowser</string>
+    <string name="button_back">Back</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
+</resources>
