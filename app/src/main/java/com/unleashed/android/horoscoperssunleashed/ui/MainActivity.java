@@ -1,15 +1,11 @@
 package com.unleashed.android.horoscoperssunleashed.ui;
 
-import android.content.ComponentName;
-import android.content.Intent;
+import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.ActionBarActivity;
-import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
 
 import com.unleashed.android.horoscoperssunleashed.R;
 
@@ -20,18 +16,18 @@ public class MainActivity extends ActionBarActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Button btn = (Button)findViewById(R.id.showbrowser);
-        btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent res = new Intent();
-                String mPackage = "com.unleashed.android.horoscoperssunleashed.ui";
-                String mClass = ".IntegratedWebBrowser";
-                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
-                startActivity(res);
-
-            }
-        });
+//        Button btn = (Button)findViewById(R.id.showbrowser);
+//        btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent res = new Intent();
+//                String mPackage = "com.unleashed.android.horoscoperssunleashed.ui";
+//                String mClass = ".IntegratedWebBrowser";
+//                res.setComponent(new ComponentName(mPackage, mPackage + mClass));
+//                startActivity(res);
+//
+//            }
+//        });
 
 
 
@@ -70,9 +66,18 @@ public class MainActivity extends ActionBarActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+
+
+        switch (id){
+
+            // Respond to the action bar's Up/Home button
+            // Or menu icon in action bar.
+            // https://developer.android.com/training/basics/actionbar/adding-buttons.html
+
+            case R.id.action_exit_app:
+                finish();
+                System.exit(0);
+                break;
         }
 
         return super.onOptionsItemSelected(item);

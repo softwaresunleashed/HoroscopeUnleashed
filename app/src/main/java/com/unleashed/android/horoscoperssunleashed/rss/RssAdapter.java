@@ -4,6 +4,7 @@ import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.unleashed.android.horoscoperssunleashed.R;
@@ -41,19 +42,82 @@ public class RssAdapter extends BaseAdapter {
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
         if (convertView == null) {
-            convertView = View.inflate(context, R.layout.rss_item, null);
+            convertView = View.inflate(context, R.layout.rss_items, null);
             holder = new ViewHolder();
             holder.itemTitle = (TextView) convertView.findViewById(R.id.itemTitle);
+            holder.imageZodiac = (ImageView) convertView.findViewById(R.id.imageView);
+            holder.itemDescription = (TextView)convertView.findViewById(R.id.itemDescription);
             convertView.setTag(holder);
         } else {
             holder = (ViewHolder) convertView.getTag();
         }
-        holder.itemTitle.setText(items.get(position).getTitle());
+
+        String title = items.get(position).getTitle();
+        holder.itemTitle.setText(title);
+
+        int imgSrcId = getImageSourceId(title);
+        if(imgSrcId != 0){
+            holder.imageZodiac.setImageResource(imgSrcId);
+        }
+
+        String description = items.get(position).getDescription();
+        holder.itemDescription.setText(description);
+
         return convertView;
+    }
+
+    private int getImageSourceId(String title) {
+        String sub_str = title.substring(0,3).toLowerCase();  // get the first three char of the title to get zodiac signs.
+        int id = 0;
+
+        switch (sub_str){
+            case "aqu":
+                id = R.mipmap.aquarius;
+                break;
+            case "ari":
+                id = R.mipmap.aries;
+                break;
+            case "can":
+                id = R.mipmap.cancer;
+                break;
+            case "cap":
+                id = R.mipmap.capricorn;
+                break;
+            case "gem":
+                id = R.mipmap.gemini;
+                break;
+            case "leo":
+                id = R.mipmap.leo;
+                break;
+            case "lib":
+                id = R.mipmap.libra;
+                break;
+            case "pis":
+                id = R.mipmap.pisces;
+                break;
+            case "sag":
+                id = R.mipmap.sagittarius;
+                break;
+            case "sco":
+                id = R.mipmap.scorpio;
+                break;
+            case "tau":
+                id = R.mipmap.taurus;
+                break;
+            case "vir":
+                id = R.mipmap.virgo;
+                break;
+        }
+
+        return id;
+
+
     }
 
     static class ViewHolder {
         TextView itemTitle;
+        ImageView imageZodiac;
+        TextView itemDescription;
     }
 
 }

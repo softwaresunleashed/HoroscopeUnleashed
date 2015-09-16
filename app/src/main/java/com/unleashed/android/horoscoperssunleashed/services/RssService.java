@@ -6,8 +6,8 @@ import android.os.Bundle;
 import android.os.ResultReceiver;
 import android.util.Log;
 
-import com.unleashed.android.horoscoperssunleashed.Constants;
-import com.unleashed.android.horoscoperssunleashed.parser.PcWorldRssParser;
+import com.unleashed.android.horoscoperssunleashed.constants.Constants;
+import com.unleashed.android.horoscoperssunleashed.parser.HoroscopeDOTComRssParser;
 import com.unleashed.android.horoscoperssunleashed.rss.RssItem;
 
 import org.xmlpull.v1.XmlPullParserException;
@@ -26,6 +26,8 @@ public class RssService extends IntentService {
     private static final String RSS_LINK = "http://my.horoscope.com/astrology/daily-horoscopes-rss.html";//"http://www.pcworld.com/index.rss";
     public static final String ITEMS = "title";//"items";
     public static final String RECEIVER = "link";//"receiver";
+    public static final String DESCRIPTION = "description";
+
 
     public RssService() {
         super("RssService");
@@ -33,10 +35,10 @@ public class RssService extends IntentService {
 
     @Override
     protected void onHandleIntent(Intent intent) {
-        Log.d(Constants.TAG, "Service started");
+        Log.d(Constants.APP_NAME_TAG, "Service started");
         List<RssItem> rssItems = null;
         try {
-            PcWorldRssParser parser = new PcWorldRssParser();
+            HoroscopeDOTComRssParser parser = new HoroscopeDOTComRssParser();
             rssItems = parser.parse(getInputStream(RSS_LINK));
         } catch (XmlPullParserException e) {
             Log.w(e.getMessage(), e);
@@ -54,7 +56,7 @@ public class RssService extends IntentService {
             URL url = new URL(link);
             return url.openConnection().getInputStream();
         } catch (IOException e) {
-            Log.w(Constants.TAG, "Exception while retrieving the input stream", e);
+            Log.w(Constants.APP_NAME_TAG, "Exception while retrieving the input stream", e);
             return null;
         }
     }

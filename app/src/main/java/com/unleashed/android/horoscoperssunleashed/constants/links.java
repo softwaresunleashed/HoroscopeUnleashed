@@ -1,4 +1,4 @@
-package com.unleashed.android.horoscoperssunleashed;
+package com.unleashed.android.horoscoperssunleashed.constants;
 
 /**
  * Created by gupta on 8/10/2015.

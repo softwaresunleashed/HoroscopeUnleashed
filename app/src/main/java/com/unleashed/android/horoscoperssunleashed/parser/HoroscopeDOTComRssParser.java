@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * Created by gupta on 8/6/2015.
  */
-public class PcWorldRssParser {
+public class HoroscopeDOTComRssParser {
 
     // We don't use namespaces
     private final String ns = null;
@@ -36,6 +36,7 @@ public class PcWorldRssParser {
         parser.require(XmlPullParser.START_TAG, null, "rss");
         String title = null;
         String link = null;
+        String description = null;
         List<RssItem> items = new ArrayList<RssItem>();
         while (parser.next() != XmlPullParser.END_DOCUMENT) {
             if (parser.getEventType() != XmlPullParser.START_TAG) {
@@ -46,15 +47,26 @@ public class PcWorldRssParser {
                 title = readTitle(parser);
             } else if (name.equals("link")) {
                 link = readLink(parser);
+            } else if (name.equals("description")) {
+                description = readDescription(parser);
             }
-            if (title != null && link != null) {
-                RssItem item = new RssItem(title, link);
+
+            if (title != null && link != null && description != null) {
+                RssItem item = new RssItem(title, link, description);
                 items.add(item);
                 title = null;
                 link = null;
+                description = null;
             }
         }
         return items;
+    }
+
+    private String readDescription(XmlPullParser parser) throws XmlPullParserException, IOException  {
+        parser.require(XmlPullParser.START_TAG, ns, "description");
+        String description = readText(parser);
+        parser.require(XmlPullParser.END_TAG, ns, "description");
+        return description;
     }
 
     private String readLink(XmlPullParser parser) throws XmlPullParserException, IOException {

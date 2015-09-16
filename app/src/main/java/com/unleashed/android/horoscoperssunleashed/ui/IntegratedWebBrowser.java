@@ -1,19 +1,24 @@
 package com.unleashed.android.horoscoperssunleashed.ui;
 
-import com.unleashed.android.horoscoperssunleashed.Constants;
-import com.unleashed.android.horoscoperssunleashed.R;
-import com.unleashed.android.horoscoperssunleashed.util.SystemUiHider;
-
 import android.annotation.TargetApi;
 import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
+import android.webkit.WebViewClient;
+import android.widget.Button;
+import android.widget.ProgressBar;
+
+import com.unleashed.android.horoscoperssunleashed.R;
+import com.unleashed.android.horoscoperssunleashed.util.SystemUiHider;
 
 /**
  * An example full-screen activity that shows and hides the system UI (i.e.
@@ -50,29 +55,56 @@ public class IntegratedWebBrowser extends Activity {
      */
     private SystemUiHider mSystemUiHider;
 
+
+    private ProgressBar progressBar;
+    private Button btnBack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_integrated_web_browser);
 
-        try{
-            WebView browser = (WebView)findViewById(R.id.webView_webBrowser);
-            WebSettings webSettings = browser.getSettings();
-            webSettings.setJavaScriptEnabled(true);
-            browser.loadUrl("www.google.com");
-        }catch (Exception ex){
-            Log.e(Constants.TAG, ex.getStackTrace().toString());
-        }
+        // Programmatically set the Background color of the title bar
+        this.getActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("Black")));
 
-
+        // Start the progress bar.
+        progressBar = (ProgressBar)findViewById(R.id.progressBar_browser);
 
         final View controlsView = findViewById(R.id.fullscreen_content_controls);
         final View contentView = findViewById(R.id.webView_webBrowser);
 
+
+        // Sudhanshu  : Add code to load the passed Uri in the in-app browser.
+        Intent dataReceived = getIntent();
+        Uri uri = dataReceived.getData();
+
+        // Browser settings.
+        WebView webView = (WebView)contentView;
+        WebSettings webSettings = webView.getSettings();
+        webSettings.setJavaScriptEnabled(true);
+        webView.loadUrl(uri.toString());
+        webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageFinished(WebView view, String url) {
+                progressBar.setVisibility(View.GONE);
+            }
+        });
+
+
+        btnBack = (Button)findViewById(R.id.btn_back);
+        btnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();   // close the activity
+            }
+        });
+
+
+
         // Set up an instance of SystemUiHider to control the system UI for
         // this activity.
-        mSystemUiHider = SystemUiHider.getInstance(this, contentView, HIDER_FLAGS);
+        mSystemUiHider = SystemUiHider.getInstance(this, controlsView, HIDER_FLAGS);
         mSystemUiHider.setup();
         mSystemUiHider
                 .setOnVisibilityChangeListener(new SystemUiHider.OnVisibilityChangeListener() {
@@ -113,7 +145,7 @@ public class IntegratedWebBrowser extends Activity {
                 });
 
         // Set up the user interaction to manually show or hide the system UI.
-        contentView.setOnClickListener(new View.OnClickListener() {
+        controlsView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (TOGGLE_ON_CLICK) {
@@ -137,7 +169,7 @@ public class IntegratedWebBrowser extends Activity {
         // Trigger the initial hide() shortly after the activity has been
         // created, to briefly hint to the user that UI controls
         // are available.
-        delayedHide(100);
+        delayedHide(5000);
     }
 
 

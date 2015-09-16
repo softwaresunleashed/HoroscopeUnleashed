@@ -44,20 +44,67 @@ public class RssFragment  extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (view == null) {
+
             view = inflater.inflate(R.layout.fragment_layout, container, false);
             progressBar = (ProgressBar) view.findViewById(R.id.progressBar);
+
             listView = (ListView) view.findViewById(R.id.listView);
             listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
                     RssAdapter adapter = (RssAdapter)adapterView.getAdapter(); // parent.getAdapter();
                     RssItem item = (RssItem) adapter.getItem(position);
+
+
+//                    // Display the Description in a dialog
+//                    // When creating a Dialog inside a fragment, take the context of Fragment.
+//                    AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
+//                    builder.setIcon(R.drawable.ic_launcher);
+//                    builder.setCancelable(true);
+//
+//                    //Set the zodiac sign in the title of dialog box
+//                    builder.setTitle(item.getTitle());
+//
+//                    // Set the description of today's zodiac.
+//                    builder.setMessage(item.getDescription());
+//
+//                    // Dismiss Dialog
+//                    builder.setNegativeButton(R.string.ok, new DialogInterface.OnClickListener() {
+//                        @Override
+//                        public void onClick(DialogInterface dialogInterface, int i) {
+//                            // Dismiss the dialog box
+//                            dialogInterface.dismiss();
+//
+//                        }
+//                    });
+//
+//                    try{
+//                        // Create and Show the Dialog box finally
+//                        AlertDialog alert = builder.create();
+//                        alert.show();
+//                    }catch (Exception ex){
+//                        ex.printStackTrace();
+//                    }
+
+
+//                    // Open the Link in an External Browser.
+//                    Uri uri = Uri.parse(item.getLink());
+//                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+//                    startActivity(intent);
+
+
+                    // Open the Link in Apps Browser.
                     Uri uri = Uri.parse(item.getLink());
-                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    Intent intent = new Intent(getActivity(), IntegratedWebBrowser.class);
+                    intent.setData(uri);        // set the url along with the intent.
                     startActivity(intent);
+
+
                 }
             });
+
             startService();
+
         } else {
             // If we are returning from a configuration change:
             // "view" is still attached to the previous view hierarchy
