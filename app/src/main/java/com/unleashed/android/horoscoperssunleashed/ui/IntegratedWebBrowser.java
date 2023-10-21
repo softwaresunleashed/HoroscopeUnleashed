@@ -3,6 +3,7 @@ package com.unleashed.android.horoscoperssunleashed.ui;
 import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
@@ -85,6 +86,12 @@ public class IntegratedWebBrowser extends Activity {
         webSettings.setJavaScriptEnabled(true);
         webView.loadUrl(uri.toString());
         webView.setWebViewClient(new WebViewClient() {
+            @Override
+            public void onPageStarted(WebView view, String url, Bitmap favicon) {
+                // Start the progress bar.
+                progressBar.setVisibility(View.VISIBLE);
+            }
+
             @Override
             public void onPageFinished(WebView view, String url) {
                 progressBar.setVisibility(View.GONE);

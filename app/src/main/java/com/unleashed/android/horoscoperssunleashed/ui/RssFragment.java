@@ -1,5 +1,7 @@
 package com.unleashed.android.horoscoperssunleashed.ui;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.unleashed.android.horoscoperssunleashed.R;
+import com.unleashed.android.horoscoperssunleashed.helpers.Connectivity;
 import com.unleashed.android.horoscoperssunleashed.rss.RssAdapter;
 import com.unleashed.android.horoscoperssunleashed.rss.RssItem;
 import com.unleashed.android.horoscoperssunleashed.services.RssService;
@@ -29,6 +32,14 @@ public class RssFragment  extends Fragment {
     private ProgressBar progressBar;
     private ListView listView;
     private View view;
+    private Context mActivity;
+
+    @Override
+    public void onAttach(Activity activity) {
+        super.onAttach(activity);
+
+        mActivity = activity.getApplicationContext();
+    }
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -92,12 +103,17 @@ public class RssFragment  extends Fragment {
 //                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
 //                    startActivity(intent);
 
+                    if(Connectivity.getNetworkInfo(mActivity).isConnected() == true){
+                        // Open the Link in Apps Browser.
+                        Uri uri = Uri.parse(item.getLink());
+                        Intent intent = new Intent(getActivity(), IntegratedWebBrowser.class);
+                        intent.setData(uri);        // set the url along with the intent.
+                        startActivity(intent);
+                    }else{
+                        Toast.makeText(mActivity, "No Network. Try again later.", Toast.LENGTH_LONG).show();
+                        //Snackbar.make(view, "Replace with your own detail action", Snackbar.LENGTH_LONG).setAction("Action", null).show();
+                    }
 
-                    // Open the Link in Apps Browser.
-                    Uri uri = Uri.parse(item.getLink());
-                    Intent intent = new Intent(getActivity(), IntegratedWebBrowser.class);
-                    intent.setData(uri);        // set the url along with the intent.
-                    startActivity(intent);
 
 
                 }
